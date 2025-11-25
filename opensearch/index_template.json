@@ -1,0 +1,49 @@
+{
+    "index_patterns": [
+        "logs-*"
+    ],
+    "template": {
+        "settings": {
+            "number_of_shards": 1,
+            "number_of_replicas": 0
+        },
+        "mappings": {
+            "properties": {
+                "@timestamp": {
+                    "type": "date"
+                },
+                "tenant": {
+                    "type": "keyword"
+                },
+                "source": {
+                    "type": "keyword"
+                },
+                "event_type": {
+                    "type": "keyword"
+                },
+                "severity": {
+                    "type": "integer"
+                },
+                "action": {
+                    "type": "keyword"
+                },
+                "src_ip": {
+                    "type": "ip"
+                },
+                "dst_ip": {
+                    "type": "ip"
+                },
+                "user": {
+                    "type": "keyword"
+                },
+                "host": {
+                    "type": "keyword"
+                },
+                "raw": {
+                    "type": "object",
+                    "enabled": false
+                }
+            }
+        }
+    }
+}
