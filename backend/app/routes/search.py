@@ -17,9 +17,16 @@ async def search_logs(
     if token.role == "admin" and tenant_param:
         tenant = tenant_param
         
-    index_pattern  = f"logs-{tenant}*"
+    index_pattern  = f"logs-{tenant.lower()}*"
     
-    query_body = {"query": {"query_string": {"query": q}}}
+    query_body = {
+        "query": {
+            "query_string": {
+                "query": q,
+                "fields": ["event_type", "sub", "user", "role", "src_ip"]
+            }
+        }
+    }
     
     if from_ts or to_ts:
         range_q = {"range": {"@timestamp": {}}}

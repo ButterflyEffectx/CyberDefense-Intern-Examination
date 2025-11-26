@@ -20,7 +20,9 @@ async def upload_logs(file: UploadFile = File(...), token: TokenData = Depends(d
     for entry in logs:
         doc = normalize_log(entry)
         doc["tenant"] = token.tenant
-        index_name = f"logs-{doc['tenant']}"
+        doc["sub"] = token.sub
+        doc["role"] = token.role
+        index_name = f"logs-{doc['tenant'].lower()}"
         client.index(
             index = index_name,
             body = doc,

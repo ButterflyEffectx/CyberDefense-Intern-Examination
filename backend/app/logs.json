@@ -1,0 +1,4 @@
+[
+  {"event_type": "fw_deny", "src_ip":"10.0.0.1"},
+  {"event_type": "fw_allow", "src_ip":"10.0.0.2"}
+]

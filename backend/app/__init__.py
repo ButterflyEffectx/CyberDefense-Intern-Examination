@@ -8,7 +8,7 @@ def get_client():
 
     client = OpenSearch(
         hosts=[{'host': host, 'port': port}],
-        http_compass = True,
+        http_compress = True,
         use_ssl=use_ssl,
         verify_certs = False,
         connection_class=RequestsHttpConnection,

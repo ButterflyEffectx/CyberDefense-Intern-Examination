@@ -7,7 +7,7 @@ def get_client():
     
     client = OpenSearch(
         hosts = [{"host": host, "port": port}],
-        htpp_compress = True,
+        http_compress = True,
         use_ssl = False,
         verify_certs = False
     )
