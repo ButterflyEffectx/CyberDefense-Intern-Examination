@@ -1,49 +1,29 @@
 {
-    "index_patterns": [
-        "logs-*"
-    ],
-    "template": {
-        "settings": {
-            "number_of_shards": 1,
-            "number_of_replicas": 0
-        },
-        "mappings": {
-            "properties": {
-                "@timestamp": {
-                    "type": "date"
-                },
-                "tenant": {
-                    "type": "keyword"
-                },
-                "source": {
-                    "type": "keyword"
-                },
-                "event_type": {
-                    "type": "keyword"
-                },
-                "severity": {
-                    "type": "integer"
-                },
-                "action": {
-                    "type": "keyword"
-                },
-                "src_ip": {
-                    "type": "ip"
-                },
-                "dst_ip": {
-                    "type": "ip"
-                },
-                "user": {
-                    "type": "keyword"
-                },
-                "host": {
-                    "type": "keyword"
-                },
-                "raw": {
-                    "type": "object",
-                    "enabled": false
-                }
-            }
-        }
+  "index_patterns": ["logs-*"],
+  "template": {
+    "settings": {
+      "number_of_shards": 1,
+      "number_of_replicas": 0,
+      "index.plugins.index_state_management.policy_id": "logs_policy"
+    },
+    "mappings": {
+      "properties": {
+        "@timestamp": { "type": "date" },
+        "tenant": { "type": "keyword" },
+        "source": { "type": "keyword" },
+        "event_type": { "type": "keyword" },
+        "event_subtype": { "type": "keyword" },
+        "severity": { "type": "integer" },
+        "action": { "type": "keyword" },
+        "src_ip": { "type": "ip" },
+        "dst_ip": { "type": "ip" },
+        "url": { "type": "keyword" },
+        "user": { "type": "keyword" },
+        "host": { "type": "keyword" },
+        "raw": { "enabled": false },
+        "_tags": { "type": "keyword" }
+      }
     }
+  },
+  "priority": 1
 }

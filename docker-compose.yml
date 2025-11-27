@@ -18,6 +18,17 @@ services:
     ports:
       - "9200:9200"
       - "9600:9600"
+  
+  opensearch-init:
+    image: curlimages/curl:7.88.1
+    depends_on:
+      - opensearch
+    entrypoint: ["/bin/sh", "/init/init.sh"]
+    volumes:
+      - ./opensearch/init.sh:/init/init.sh
+      - ./opensearch/index_template.json:/init/index_template.json
+      - ./opensearch/ilm_policy.json:/init/ilm_policy.json
+
 
   opensearch-dashboards:
     image: opensearchproject/opensearch-dashboards:2.15.0

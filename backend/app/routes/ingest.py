@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends
 from app.auth import decode_token, TokenData
 from app.opensearch_client import get_client
 from app.normalization import normalize_log
+from datetime import datetime
 import uuid
 
 router = APIRouter()
@@ -14,7 +15,8 @@ async def ingest_log(data: dict, token: TokenData =Depends(decode_token)):
     doc["tenant"] = token.tenant
     doc["sub"] = token.sub
     doc["role"] = token.role
-    index_name = f"logs-{doc['tenant'].lower()}"
+    date_suffix = datetime.utcnow().strftime("%Y.%m.%d")
+    index_name = f"logs-{doc['tenant'].lower()}-{date_suffix}"
     
     try : 
         resp = client.index(
