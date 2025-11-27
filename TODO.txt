@@ -1,0 +1,4 @@
+TODO:
+ 1. curl -X POST "http://localhost:8000/logs/ingest" -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhbGljZSIsInJvbGUiOiJ1c2VyIiwidGVuYW50IjoiZGVtb0EifQ.sl9razbD0xt34Js68lPTL4rN9P9mS0O6OpvI66eZcHc" -H "Content-Type: application/json" -d '{"source":"firewall","event_type":"connection","event_subtype":"allowed","severity":3,"src_ip":"10.0.0.1","dst_ip":"8.8.8.8"}'
+{"status":"ok","indexed_to":"logs-demoa-2025.11.27","id":"g6XZxZoB0JsMqqeOW2xZ"}
+** เพิ่ม log ที่ api /logs/ingest แล้ว success แต่ไม่สามารถค้นหาได้
