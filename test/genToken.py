@@ -1,7 +1,7 @@
 from jose import jwt
 
 token = jwt.encode(
-    {"sub": "Test", "role": "user", "tenant": "demoC"},
+    {"sub": "Joey", "role": "admin", "tenant": "demoA"},
     "changemeverystrongsecret",
     algorithm="HS256"
 )
