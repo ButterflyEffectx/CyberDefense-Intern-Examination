@@ -21,6 +21,9 @@
                 "event_type": {
                     "type": "keyword"
                 },
+                "event_subtype": {
+                    "type": "keyword"
+                },
                 "severity": {
                     "type": "integer"
                 },
@@ -33,6 +36,9 @@
                 "dst_ip": {
                     "type": "ip"
                 },
+                "url": {
+                    "type": "keyword"
+                },
                 "user": {
                     "type": "keyword"
                 },
@@ -42,8 +48,12 @@
                 "raw": {
                     "type": "object",
                     "enabled": false
+                },
+                "_tags": {
+                    "type": "keyword"
                 }
             }
         }
-    }
+    },
+    "priority": 1
 }

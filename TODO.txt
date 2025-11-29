@@ -2,3 +2,103 @@ TODO:
  1. curl -X POST "http://localhost:8000/logs/ingest" -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhbGljZSIsInJvbGUiOiJ1c2VyIiwidGVuYW50IjoiZGVtb0EifQ.sl9razbD0xt34Js68lPTL4rN9P9mS0O6OpvI66eZcHc" -H "Content-Type: application/json" -d '{"source":"firewall","event_type":"connection","event_subtype":"allowed","severity":3,"src_ip":"10.0.0.1","dst_ip":"8.8.8.8"}'
 {"status":"ok","indexed_to":"logs-demoa-2025.11.27","id":"g6XZxZoB0JsMqqeOW2xZ"}
 ** เพิ่ม log ที่ api /logs/ingest แล้ว success แต่ไม่สามารถค้นหาได้
+
+error ที่พบ :
+ onyou  curl -X GET "localhost:9200/logs-demoa/_search?pretty"
+{
+  "error" : {
+    "root_cause" : [
+      {
+        "type" : "index_not_found_exception",
+        "reason" : "no such index [logs-demoa]",
+        "index" : "logs-demoa",
+        "resource.id" : "logs-demoa",
+        "resource.type" : "index_or_alias",
+        "index_uuid" : "_na_"
+      }
+    ],
+    "type" : "index_not_found_exception",
+    "reason" : "no such index [logs-demoa]",
+    "index" : "logs-demoa",
+    "resource.id" : "logs-demoa",
+    "resource.type" : "index_or_alias",
+    "index_uuid" : "_na_"
+  },
+  "status" : 404
+}
+
+แต่พอย้อนกลับมา branch phase 2 สามารถ ค้นหาเจอได้ปกติ
+
+ onyou  curl -X GET "localhost:9200/logs-demoa/_search?pretty"
+{
+  "took" : 2,
+  "timed_out" : false,
+  "_shards" : {
+    "total" : 1,
+    "successful" : 1,
+    "skipped" : 0,
+    "failed" : 0
+  },
+  "hits" : {
+    "total" : {
+      "value" : 1,
+      "relation" : "eq"
+    },
+    "max_score" : 1.0,
+    "hits" : [
+      {
+        "_index" : "logs-demoa",
+        "_id" : "502f5a73-0a9f-4b86-9035-f34937e0ada9",
+        "_score" : 1.0,
+        "_source" : {
+          "@timestamp" : null,
+          "tenant" : "demoA",
+          "source" : "unknown",
+          "event_type" : "login_failed",
+          "event_subtype" : null,
+          "severity" : null,
+          "action" : null,
+          "src_ip" : "203.0.113.7",
+          "src_port" : null,
+          "dst_ip" : null,
+          "dst_port" : null,
+          "protocol" : null,
+          "sub" : "alice",
+          "role" : "user",
+          "host" : null,
+          "process" : null,
+          "url" : null,
+          "http_method" : null,
+          "status_code" : null,
+          "rule_name" : null,
+          "rule_id" : null,
+          "cloud" : { },
+          "raw" : {
+            "event_type" : "login_failed",
+            "ip" : "203.0.113.7"
+          },
+          "_tags" : [ ]
+        }
+      }
+    ]
+  }
+}
+
+ โดยไฟล์ที่ถูกแก้ไขมี 
+   - opensearch/ilm_policy.json
+   - opensearch/index_template.json
+   - routes/ingest.py (เพิ่มแค่ Datetime)
+   - docker-compose.yml
+  ไฟล์ที่ถูกเพิ่ม
+   - opensearch/init.sh
+   - routes/logs.py (สร้าง POST route /logs)
+
+สรุปปัญหาคือ backend สามารถบันทึก log ได้ปกติ แต่ opensearch ไม่สามารถค้นหาได้
+
+
+Test, user, demoC : 
+  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJUZXN0Iiwicm9sZSI6InVzZXIiLCJ0ZW5hbnQiOiJkZW1vQyJ9.KhtKmLehz2_AW4R04ZEY9dKCSYWiypYi_B_qGL1mi_I
+
+curl -X POST "http://localhost:8000/logs/ingest" -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJUZXN0Iiwicm9sZSI6InVzZXIiLCJ0ZW5hbnQiOiJkZW1vQyJ9.KhtKmLehz2_AW4R04ZEY9dKCSYWiypYi_B_qGL1mi_I" -H "Content-Type: application/json" -d '{"source":"firewall","event_type":"connection","event_subtype":"allowed","severity":3,"src_ip":"10.0.0.1","dst_ip":"8.8.8.8"}'
+
+curl -X GET "http://localhost:9200/logs-democ-*/_search" -H "Content-Type: application/json" -d '{"query":{"match_all":{}}}'

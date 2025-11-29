@@ -1,20 +1,35 @@
 {
-    "policy": {
-        "phases": {
-            "hot": {
-                "actions": {
-                    "rollover": {
-                        "max_size": "50gb",
-                        "max_age": "1d"
-                    }
-                }
-            },
-            "delete": {
-                "min_age": "7d",
-                "actions": {
-                    "delete": {}
-                }
+  "policy": {
+    "description": "logs rollover and delete policy",
+    "default_state": "hot",
+    "states": [
+      {
+        "name": "hot",
+        "actions": [
+          {
+            "rollover": {
+              "min_size": "50gb",
+              "min_index_age": "1d"
             }
-        }
-    }
+          }
+        ],
+        "transitions": [
+          {
+            "state_name": "delete",
+            "conditions": {
+              "min_index_age": "7d"
+            }
+          }
+        ]
+      },
+      {
+        "name": "delete",
+        "actions": [
+          {
+            "delete": {}
+          }
+        ]
+      }
+    ]
+  }
 }
